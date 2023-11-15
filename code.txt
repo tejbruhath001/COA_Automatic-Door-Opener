@@ -1,0 +1,78 @@
+SOURCE CODE
+
+#define enA 10//Enable1 L298 Pin enA 
+#define in1 9 //Motor1 L298 Pin in1 
+#define in2 8 //Motor1 L298 Pin in1 
+#define in3 7 //Motor2 L298 Pin in1 
+#define in4 6 //Motor2 L298 Pin in1 
+#define enB 5 //Enable2 L298 Pin enB 
+#define tri A0
+#define ego A1
+#define speed1 50
+#define speed2 60
+
+void setup(){
+
+Serial.begin(9600); 
+
+
+pinMode(enA, OUTPUT); 
+pinMode(in1, OUTPUT); 
+pinMode(in2, OUTPUT); 
+pinMode(in3, OUTPUT); 
+pinMode(in4, OUTPUT); 
+pinMode(enB, OUTPUT); 
+
+pinMode(ego, INPUT );
+pinMode(tri, OUTPUT); 
+void loop(){ 
+long dur, dis;
+
+digitalWrite(tri, LOW);
+delayMicroseconds(2);
+
+digitalWrite(tri, HIGH);
+delayMicroseconds(10);
+digitalWrite(tri, LOW);
+
+dur = pulseIn(ego, HIGH);
+dis= (dur/2)/29.1;
+
+Serial.println(dis );
+
+if(dis< 10)
+{
+analogWrite(enA, speed1); 
+analogWrite(enB, speed2);
+open();
+delay(500);
+close();
+delay(1000);
+stop();
+}
+
+}
+void close(){ //forword
+digitalWrite(in1, LOW); //Left Motor backword Pin 
+digitalWrite(in2, HIGH); //Left Motor forword Pin 
+digitalWrite(in3, HIGH); //Right Motor forword Pin 
+digitalWrite(in4, LOW); //Right Motor backword Pin 
+}
+
+void open(){
+digitalWrite(in1, HIGH); //Left Motor backword Pin 
+digitalWrite(in2, LOW); //Left Motor forword Pin 
+digitalWrite(in3, LOW); //Right Motor forword Pin 
+digitalWrite(in4, HIGH); //Right Motor backword Pin 
+
+}
+
+void stop(){
+digitalWrite(in1, LOW); //Left Motor backword Pin 
+digitalWrite(in2, LOW); //Left Motor forword Pin 
+digitalWrite(in3, LOW); //Right Motor forword Pin 
+digitalWrite(in4, LOW); //Right Motor backword Pin 
+
+}
+
+
